@@ -103,11 +103,11 @@ function app(){
                         .call(egoGraph);
                 } else {
                     egoGraph.egoCenter(center)
-                    d3.select("#ego")
-                        .datum(data)
-                        .call(egoGraph)
+                    //d3.select("#ego")
+                     //   .datum(data)
+                     //   .call(egoGraph)
                     
-                    //egoGraph.restart(data.nodes, data.links)
+                    egoGraph.restart(data.nodes, data.links)
                 }
             });
         }

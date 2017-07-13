@@ -71,12 +71,6 @@ function EgoNetwork() {
         link.exit().remove()
         link = link.enter().append("svg:path");
 
-        
-        simulation.nodes(nodes);
-        simulation.links(links);
-        simulation.start();
-        simulation.alpha(0.5);
-
         circle = node.append("circle")
             .style("fill", function (d) { 
                 if (d.id === center ) return 'orange'; 
@@ -97,6 +91,10 @@ function EgoNetwork() {
             .attr("stroke", "grey")
             .attr("stroke-width", function (d) {return (d.value)})
             .attr("fill", "none")
+
+        simulation.nodes(nodes);
+        simulation.links(links);
+        simulation.alpha(0.5);
 
         return me;        
     }
