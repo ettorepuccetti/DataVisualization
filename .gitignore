@@ -1,3 +1,10 @@
+# file dataset interi
+assets/data/comm*
+assets/data/receiver_per_hour/
+assets/data/sender_per_hour/
+node_modules/
+
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
