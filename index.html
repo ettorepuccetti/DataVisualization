@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
     <head>
@@ -131,4 +132,139 @@
         <!-- Javascript to be executed -->
         <script src="assets/js/main.js" type="text/javascript" charset="utf-8"></script>
     </body>
+=======
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <title>prima prova</title>
+        <!-- CSS libraries -->
+        <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" type="text/css" media="screen">
+        
+        <!-- Javascript libraries-->
+        <script src="node_modules/d3/d3.js" type="text/javascript" charset="utf-8"></script>
+        <script src="node_modules/d3-scale/build/d3-scale.js" type="text/javascript" charset="utf-8"></script>
+        <script src="node_modules/nvd3/build/nv.d3.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="node_modules/d3-force/build/d3-force.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="assets/js/chart.js" type="text/javascript" charset="utf-8"></script>
+        <script src="assets/js/toolbarhours.js" type="text/javascript" charset="utf-8"></script>
+        <script src="assets/js/toolbarday.js" type="text/javascript" charset="utf-8"></script>
+        <script src="assets/js/timeline.js" type="text/javascript" charset="utf-8"></script>
+        <script src="assets/js/egodirected.js" type="text/javascript" charset="utf-8"></script>
+        <script src="assets/js/sendergraph.js" type="text/javascript" charset="utf-8"></script>
+        <script src="assets/js/eventhandler.js" type="text/javascript" charset="utf-8"></script>
+        <script src="https://d3js.org/d3-array.v1.min.js"></script>
+        <script src="https://d3js.org/d3-collection.v1.min.js"></script>
+        <script src="https://d3js.org/d3-color.v1.min.js"></script>
+        <script src="https://d3js.org/d3-format.v1.min.js"></script>
+        <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+        <script src="node_modules/d3-time/build/d3-time.min.js"></script>
+        <script src="https://d3js.org/d3-time-format.v2.min.js"></script>
+        <script src="https://d3js.org/d3-scale.v1.min.js"></script>
+        <style type="text/css" media="screen"> 
+            .axis text { 
+              font: 11px sans-serif; 
+            } 
+            .axis path { 
+              display: none; 
+            } 
+            .axis line { 
+              fill: none; 
+              stroke: #000; 
+              shape-rendering: crispEdges; 
+            } 
+            .grid-background { 
+              fill: #ddd; 
+            } 
+             
+            .brush .extent { 
+              stroke: #000; 
+              fill-opacity: .125; 
+              shape-rendering: crispEdges; 
+            }
+            
+            circle {
+            fill: #ccc;
+            stroke: #fff;
+            stroke-width: 1.5px;
+            }
+
+            #ego text {
+            font: 14px sans-serif;
+            pointer-events: none;
+            }
+
+            .toolbars {
+                margin: 20px;
+            }
+            
+            #graph {
+                margin-top: 20px
+            }
+
+            #max{
+               margin-top: 20px
+            }
+
+            .toolbars {
+                display: table;
+            }
+
+            .tool {
+                display: table-cell;
+            }        
+           
+        </style> 
+        
+        <!--  Custom Javascript libraries 
+
+            .link text {
+                display:none
+            }
+
+            .link:hover text {
+                display:inline
+            } 
+
+        <script src="assets/js/map.js" type="text/javascript" charset="utf-8"></script>
+        <script src="node_modules/d3-queue/build/d3-queue.min.js" type="text/javascript" charset="utf-8"></script>  -->
+        
+    </head>
+    <body class="container">
+        <h1 align="center"> Mini challenge 2 </h1>
+        <div id = "viz" class="row">
+            <div id="graph" class="col-xs-12">
+                
+            </div>
+            <div class = "toolbars">
+                <div class = "tool" id="toolbar"> 
+                
+                </div>
+                <div class = "tool" id="toolbar_day"> 
+                    
+                </div>
+            </div>
+            <div class="row">
+                <input onclick="dispatch.changeCenter()" type="button" value=" make ego " id="go"> </input>
+                <input name="searchTxt" type="text" id="textbox" placeholder="node's ID"></input>
+            </div>
+            <p id="max"> max count: </p>
+            <div id="ego" class="col-xs-9">
+                
+            </div>
+
+            <div id="observed" class="col-xs-3">
+                <p> list of observed nodes </p>
+                 <div class="row">
+                    <input onclick="dispatch.addObserved()" type="button" value="observe " id="observedGo"> </input>
+                    <input name="searchTxt" type="text" id="observedTextbox" placeholder="node's ID"></input>
+                </div>
+
+            </div>
+            
+        </div>
+        <!-- Javascript to be executed -->
+        <script src="assets/js/main.js" type="text/javascript" charset="utf-8"></script>
+    </body>
+>>>>>>> master
 </html>
