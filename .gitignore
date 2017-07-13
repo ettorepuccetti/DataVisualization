@@ -4,6 +4,7 @@ assets/data/comm*
 assets/data/receiver_per_hour/
 assets/data/sender_per_hour/
 node_modules/
+.vscode/
 
 
 # Windows image file caches
