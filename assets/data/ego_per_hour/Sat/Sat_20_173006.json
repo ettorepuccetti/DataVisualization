@@ -1,0 +1,1 @@
+{"nodes": [{"id": "173006"}, {"id": "1278894"}, {"id": "1805164"}, {"id": "96515"}, {"id": "1629895"}, {"id": "1686461"}], "links": [{"source": 0, "target": 1, "value": 10}, {"source": 1, "target": 0, "value": 10}, {"source": 2, "target": 0, "value": 3}, {"source": 3, "target": 0, "value": 3}, {"source": 4, "target": 0, "value": 2}, {"source": 5, "target": 0, "value": 2}]}
