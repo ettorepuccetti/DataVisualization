@@ -14,7 +14,7 @@ function app(){
         d3.csv("assets/data/counter_per_hour/sender_count_"+day+"_" +hour+ ".csv",function(error, data){
             if (error) throw error
 
-            senderGraph = OrizontalGraph("top sender: _","sender");
+            senderGraph = OrizontalGraph("top sender: ","sender");
             d3.select("#graph")
                 .datum(data)
                 .call(senderGraph)
@@ -24,7 +24,7 @@ function app(){
         d3.csv("assets/data/counter_receiver_per_hour/receiver_count_"+day+"_" +hour+ ".csv",function(error, data){
             if (error) throw error
             console.log(data)
-            receiverGraph = OrizontalGraph("top receiver: _","receiver");
+            receiverGraph = OrizontalGraph("top receiver: ","receiver");
             d3.select("#graph")
                 .datum(data)
                 .call(receiverGraph)

@@ -5,7 +5,7 @@
         <title>prima prova</title>
         <!-- CSS libraries -->
         <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" type="text/css" media="screen">
-        
+        <link rel="stylesheet" href="node_modules/nvd3/build/nv.d3.css" type="text/css" media="screen"> 
         <!-- Javascript libraries-->
         <script src="node_modules/d3/d3.js" type="text/javascript" charset="utf-8"></script>
         <script src="node_modules/d3-scale/build/d3-scale.js" type="text/javascript" charset="utf-8"></script>
@@ -77,19 +77,11 @@
 
             .tool {
                 display: table-cell;
-            }        
-           
+            }
+
         </style> 
         
         <!--  Custom Javascript libraries 
-
-            .link text {
-                display:none
-            }
-
-            .link:hover text {
-                display:inline
-            } 
 
         <script src="assets/js/map.js" type="text/javascript" charset="utf-8"></script>
         <script src="node_modules/d3-queue/build/d3-queue.min.js" type="text/javascript" charset="utf-8"></script>  -->
@@ -98,8 +90,9 @@
     <body class="container">
         <h1 align="center"> Mini challenge 2 </h1>
         <div id = "viz" class="row">
-            <div id="graph" class="col-xs-12">
-                
+            <div class = "row">
+                <div id="graph" class="col-xs-12">
+                </div>
             </div>
             <div class = "toolbars">
                 <div class = "tool" id="toolbar"> 

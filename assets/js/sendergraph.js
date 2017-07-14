@@ -1,19 +1,28 @@
 function OrizontalGraph(mylabel,myMode){
-    
+    var width = 400, height = 300;
     var label = mylabel
     var svg
-    var chart = nv.models.multiBarHorizontalChart();
+    var chart = nv.models.multiBarHorizontalChart()
+   
+    //chart.yRange([0,10000])
+    chart.yDomain([0,10000])
+    chart.yScale(d3.scale.sqrt())
+    
+    chart.margin({left:70}) 
+        .showLegend(true) 
+        .showControls(false); 
+
     var barLength = d3.scale.linear()
             .range([1, 100])
             .domain([1, 8000]);
+            
     var mode = myMode
     function me(selection) {
 
         var data = selection.datum()
 
         svg = selection.append("svg")
-            .attr("width",450)
-            .attr("height",300)
+            .attr({width:"100%", height:height}); 
 
         me.updateGraph(data)
 
