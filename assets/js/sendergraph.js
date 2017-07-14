@@ -5,7 +5,7 @@ function OrizontalGraph(mylabel,myMode){
     var chart = nv.models.multiBarHorizontalChart()
    
     //chart.yRange([0,10000])
-    chart.yDomain([0,10000])
+    chart.yDomain([0,15000])
     chart.yScale(d3.scale.sqrt())
     
     chart.margin({left:70}) 
