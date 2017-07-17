@@ -2,7 +2,7 @@ import csv
 import networkx as nx
 from itertools import groupby
 import json
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import dateutil.parser
 
 #apre i file csv, li raggruppa e ordina, prende i top 10 nodi di ogni file come centro e genera
@@ -72,8 +72,7 @@ def generaEgoNetwork(hour,day):
             continue
         
         ego_net = nx.ego_graph(graph, n=center, undirected=True)
-
-
+        
         '''
         #estraggo in una lista i 10 archi che pesano di più
         #creo un grafo di appoggio a partire da quegli archi,
@@ -99,11 +98,15 @@ def generaEgoNetwork(hour,day):
         '''
         #da li mi creo il dizionario
         ego_json = {
-            "nodes": list(map(lambda x: {"id":x}, ego_net.nodes())),
+            "nodes": list(map(lambda node: {
+                    "id":node,
+                    "neighbors": list(filter(lambda x: ego_net[node][x]['weight'] > 1, ego_net[node]))
+                },       
+                ego_net.nodes())),
             "links": list(map(lambda edge: {
                 "source" : ego_net.nodes().index(edge[0]),
                 "target" : ego_net.nodes().index(edge[1]),
-                "value" : edge[2]['weight']
+                "value" : edge[2]['weight'] 
             }, filter(lambda x: x[2]['weight'] > 1, ego_net.edges(data=True))))
         }
 
@@ -112,7 +115,7 @@ def generaEgoNetwork(hour,day):
 
 
 
-for day in ['Fri','Sat','Sun']:
-    generaNodi(day)
-    #for hour in range(8,9):
-    #    generaEgoNetwork(str(hour),day)
+for day in ['Fri']: #,'Sat','Sun']:
+    #generaNodi(day)
+    for hour in range(8,9):
+        generaEgoNetwork(str(hour),day)

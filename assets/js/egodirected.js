@@ -1,7 +1,7 @@
 function EgoNetwork() {
             
-    var width = 700;
-    var height = 500;
+    var width = 1000;
+    var height = 1000;
     var force
     var svg
 
@@ -16,7 +16,7 @@ function EgoNetwork() {
     var observedNodes = []
 
     var center
-    
+    var toogledNode
 
     function me(selection){
 
@@ -38,7 +38,8 @@ function EgoNetwork() {
             .nodes(nodes)
             .links(links)
             .size([width, height])
-            .linkDistance(200)
+            .gravity(0.3)
+            .linkDistance(width/3)
             .charge(-1500)
             .on("tick", tick);
 
@@ -71,9 +72,9 @@ function EgoNetwork() {
         path = svg.append("svg:g").selectAll("path")
             .data(links, function(d) {return d.source.id + "-" + d.target.id;})
         path.enter().append("svg:path")
-            .attr("class", "link")
+            .classed("link", true)
             .attr("marker-end", "url(#end)")
-            .attr("stroke", "grey")
+            .attr("stroke", "lightgray")
             .attr("stroke-width", function (d) {return (d.value)})
             .attr("fill", "none")
         
@@ -81,19 +82,26 @@ function EgoNetwork() {
         node = svg.selectAll(".node")
             .data(nodes,function(d) {return d.id});
         node.enter().append("g")
-            .attr("class", "node");
+            .classed("node",true);
 
 
         node.call(force.drag);
 
         // add the nodes
         circle = node.append("circle")
+            //.classed("node",true)
             .style("fill", function (d) { 
                 if (d.id === center ) return 'orange'; 
-                else if (observedNodes.indexOf(d.id) === -1) return '#ccc';
+                else if (observedNodes.indexOf(d.id) === -1) return 'steelblue';
                     else return '#008000';
                 })
             .attr("r", function (d) { if (d.id === center) return 9; else return 6; })
+            .on("dblclick", function(d){
+                console.log(d);
+                toggleNode(d);
+                //force.alpha(0.01).start();
+                tick();
+            }); 
 
         // add the text 
         node.append("text")
@@ -102,6 +110,14 @@ function EgoNetwork() {
             .attr("fill", function(d) {if (observedNodes.indexOf(d.id) === -1) return 'red'; else return '#008000'})
             .text(function(d) { return d.id; });
 
+        function toggleNode(n) {
+            toogledNode = n.id
+            n.highlight = !n.highlight;
+            nodes.forEach(function(node) {
+                if(n.neighbors.indexOf(node.id)!==-1)
+                    node.highlight = n.highlight;
+            })
+        }
 
         // add the curvy lines
         function tick() {
@@ -115,10 +131,12 @@ function EgoNetwork() {
                     dr + "," + dr + " 0 0,1 " + 
                     d.target.x + "," + 
                     d.target.y;
-            });
-            node
-                .attr("transform", function(d) { 
-                return "translate(" + d.x + "," + d.y + ")"; });
+            })
+            .classed("highlight", function(l){return l.source.id === toogledNode && l.target.highlight  && l.source.highlight});
+            
+            node.attr("transform", function(d) { 
+                    return "translate(" + d.x + "," + d.y + ")"; })
+                .classed("highlight", function(d){return d.highlight});
         }
 
         return me

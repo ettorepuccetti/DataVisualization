@@ -22,7 +22,18 @@ def generaCsvSender(filename,day):
         #per generare l'ultimo file (ore 23) perchè hour non supera mai il valore 23
         DumpList(filtered_list,hour,day)
 
-    
+
+def generaCsvReceiverAll(filename,day):
+    filtered_list = []
+    with open (filename) as csvfile:
+        printer = csv.reader(csvfile)
+        next(printer)
+        for row in printer:
+            filtered_list.append(row)
+        
+    compactAndDumpList(filtered_list,'all',day)
+
+
 def compactAndDumpList(filtered_list,hour,day):
 
     #ordinati per destinatario stavolta (x[2])
@@ -51,4 +62,4 @@ def DumpList(filtered_list,hour,day):
             mywriter.writerow(e)
 
 for day in ['Fri','Sat','Sun']:
-    generaCsvSender('assets/data/comm-data-'+day+'.csv',day)
+    generaCsvReceiverAll('assets/data/comm-data-'+day+'.csv',day)

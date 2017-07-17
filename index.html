@@ -40,33 +40,16 @@
             } 
             .grid-background { 
               fill: #ddd; 
-            } 
-             
-            .brush .extent { 
-              stroke: #000; 
-              fill-opacity: .125; 
-              shape-rendering: crispEdges; 
-            }
-            
-            circle {
-            fill: #ccc;
-            stroke: #fff;
-            stroke-width: 1.5px;
-            }
-
-            #ego text {
-            font: 14px sans-serif;
-            pointer-events: none;
             }
 
             .toolbars {
                 margin: 20px;
             }
-            
+
             .firstrow {
                 margin-top: 20px
             }
-
+            
             #max{
                margin-top: 20px
             }
@@ -78,6 +61,42 @@
             .tool {
                 display: table-cell;
             }
+
+            circle {
+                fill: #ccc;
+            }
+
+            #ego text {
+                font: 14px sans-serif;
+                pointer-events: none;
+                display: none
+            }
+
+            #ego .node.highlight text {
+                display: block
+            }
+
+            #ego .node{
+				fill: steelblue;
+				opacity: 0.6;
+				stroke: none;
+			}
+			
+			#ego .node.highlight{
+				stroke: red;
+				stroke-width: 2px;
+			}
+			
+			#ego .link{
+				stroke: lightgray;
+				opacity: 0.4;
+				fill: none;
+			}
+			
+			#ego .link.highlight{
+				stroke: green;
+			}
+
 
         </style> 
         
@@ -108,7 +127,7 @@
                 <input name="searchTxt" type="text" id="textbox" placeholder="node's ID"></input>
             </div>
             <p id="max"> max count: </p>
-            <div id="ego" class="col-xs-9">
+            <div id="ego" class="col-xs-12">
                 
             </div>
 
