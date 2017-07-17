@@ -3,7 +3,7 @@ function app(){
     //var format = d3.time.format("%Y-%m-%d %H:%M:%S") 
     //var timeExtent = [new Date(2014, 6, 6, 8), new Date(2014, 6, 6, 22)];
     var hour = '8'
-    var center = '1300247'
+    var center = '321318'
     var senderGraph
     var receiverGraph
     var egoGraph

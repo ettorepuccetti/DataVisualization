@@ -17,6 +17,15 @@ def generaNodi(day):
             for i in range(0,10):
                 watchNodes.append(next(printer)[0])
             csvfile.close()
+    
+    for hour in range(8,24):
+        with open ("assets/data/counter_receiver_per_hour/receiver_count_"+day+"_"+str(hour)+".csv") as csvfile:
+            printer = csv.reader(csvfile)
+            next(printer)
+            for i in range(0,10):
+                watchNodes.append(next(printer)[0])
+            csvfile.close()
+    
     watchNodes = list(set(watchNodes))
     with open('assets/data/ego_per_hour/'+day+'/listanodiscript.json', 'w+') as outjson:
         json.dump({"watchnodes":list(map(lambda x: x.replace("'","\""),watchNodes))}, outjson)
@@ -55,10 +64,17 @@ def generaEgoNetwork(hour,day):
             continue
        
         #commentare le prime due righe in caso si voglia la vera EgoNetwork, la 3 per vedere solo i messaggi partiti dal nodo
-        ego_net = nx.DiGraph()
-        ego_net.add_weighted_edges_from( [(i[0],i[1],i[2]['weight']) for i in graph.edges([center],data=True)] )
-        #ego_net = nx.ego_graph(graph, center, radius=1, undirected=False)
+        #ego_net = nx.DiGraph()
+        #ego_net.add_weighted_edges_from( [(i[0],i[1],i[2]['weight']) for i in graph.edges([center],data=True)] )
         
+        if center not in graph.nodes():
+            print ('centro non presente nel grafo'+ center)
+            continue
+        
+        ego_net = nx.ego_graph(graph, n=center, undirected=True)
+
+
+        '''
         #estraggo in una lista i 10 archi che pesano di più
         #creo un grafo di appoggio a partire da quegli archi,
         #per ottenere facilmente la lista dei nodi 
@@ -71,7 +87,7 @@ def generaEgoNetwork(hour,day):
         #girare il grafico, salvandomi su un grafo di appoggio
         #prendere i 10 nodi che pesano di più che coinvolgono il center
         #costruirci un altro digraph aux_reversed per poter girare i link, girare quel grafico,
-        #estrarre la lista deglli archi e aggiungerli ad aux_graph
+        #estrarre la lista degli archi e aggiungerli ad aux_graph
         
         aux_graph_reversed = nx.reverse(graph)
         links_reversed = aux_graph_reversed.edges([center],data=True)
@@ -80,15 +96,15 @@ def generaEgoNetwork(hour,day):
         aux_graph_reversed = nx.DiGraph(links_reversed)
         nx.reverse(aux_graph_reversed, copy=False)
         aux_graph.add_weighted_edges_from([(i[0],i[1],i[2]['weight']) for i in aux_graph_reversed.edges(data=True)])
-        
+        '''
         #da li mi creo il dizionario
         ego_json = {
-            "nodes": list(map(lambda x: {"id":x}, aux_graph.nodes())),
+            "nodes": list(map(lambda x: {"id":x}, ego_net.nodes())),
             "links": list(map(lambda edge: {
-                "source" : aux_graph.nodes().index(edge[0]),
-                "target" : aux_graph.nodes().index(edge[1]),
+                "source" : ego_net.nodes().index(edge[0]),
+                "target" : ego_net.nodes().index(edge[1]),
                 "value" : edge[2]['weight']
-            }, aux_graph.edges(data=True)))
+            }, filter(lambda x: x[2]['weight'] > 1, ego_net.edges(data=True))))
         }
 
         with open('assets/data/ego_per_hour/'+day+'/'+day+'_'+hour+'_'+center+'.json', 'w+') as outjson:
@@ -96,6 +112,7 @@ def generaEgoNetwork(hour,day):
 
 
 
-for day in ['Sat','Sun']:
-    for hour in range(8,24):
-        generaEgoNetwork(str(hour),day)
+for day in ['Fri','Sat','Sun']:
+    generaNodi(day)
+    #for hour in range(8,9):
+    #    generaEgoNetwork(str(hour),day)

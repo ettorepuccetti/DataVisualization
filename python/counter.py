@@ -4,6 +4,7 @@ from operator import itemgetter
 import dateutil.parser
 
 
+
 def generaCsvSender(filename,day):
     filtered_list = []
     hour = 8
@@ -20,6 +21,18 @@ def generaCsvSender(filename,day):
                 hour = hour + 1
         #per generare l'ultimo file (ore 23) perchè hour non supera mai il valore 23
         DumpList(filtered_list,hour,day)
+
+def generaCsvSenderAll(filename,day):
+    filtered_list = []
+    with open (filename) as csvfile:
+        printer = csv.reader(csvfile)
+        next(printer)
+        for row in printer:
+            filtered_list.append(row)
+        
+    compactAndDumpList(filtered_list,'all',day)
+
+
 
 #prende la lista tagliata per ora, e raggruppa per count di mittente
 def compactAndDumpList(filtered_list,hour,day):
@@ -50,4 +63,4 @@ def DumpList(filtered_list,hour,day):
 
 
 for day in ['Sat','Sun']:
-    generaCsvSender('assets/data/comm-data-'+day+'.csv',day)
+    generaCsvSenderAll('assets/data/comm-data-'+day+'.csv',day)

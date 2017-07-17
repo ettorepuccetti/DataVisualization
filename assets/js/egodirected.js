@@ -16,6 +16,7 @@ function EgoNetwork() {
     var observedNodes = []
 
     var center
+    
 
     function me(selection){
 

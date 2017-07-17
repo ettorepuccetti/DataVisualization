@@ -4,6 +4,12 @@ function OrizontalGraph(mylabel,myMode){
     var svg
     var chart = nv.models.multiBarHorizontalChart()
    
+   chart.multibar.dispatch.on('elementClick', function(e){
+        console.log('element: ' + e.data.x);
+        myApp.center(e.data.x);
+	    myApp.updateEgoData();
+    });
+    
     //chart.yRange([0,10000])
     chart.yDomain([0,15000])
     chart.yScale(d3.scale.sqrt())
