@@ -1,7 +1,5 @@
 # file dataset interi
-assets/data/comm*
-assets/data/receiver_per_hour/
-assets/data/sender_per_hour/
+assets/data/*
 node_modules/
 .vscode/
 

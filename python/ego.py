@@ -65,35 +65,43 @@ def generaReteCompleta(hour,day):
     #genero il file della rete completa di questa ora per passarla a infomap
     with open ("assets/data/complete_network/edgelist_"+day+"_"+hour+".csv","w+", newline="") as csvout:
         mywriter = csv.writer(csvout, delimiter = " ")
-        graph_node = graph.nodes()
+        graph_node = graph .nodes()
         mywriter.writerow(["*Vertices",str(len(graph_node))])
         for i,n in enumerate(graph.nodes()):
             mywriter.writerow([i,n])
         mywriter.writerow(["*Edges",str(len(graph.edges(data=True)))])
         for e in graph.edges(data=True):
             mywriter.writerow([graph_node.index(e[0]), graph_node.index(e[1]), e[2]['weight']])
+    
 
+def riempiDizionarioComm(day):
+    #devo riaprire il file della rete completa assets/data/complete_network/edgelist_"+day+"_all.csv"
+    # e scrivere nel dizionario a che nodo corrisponde il numero di nodo che ho nel file aperto nella cartella communities
+
+    comm_dict = {}
+    #leggo dal file clu la comunità a cui ogni nodo appartiene
+    with open ("assets/data/communities/edgelist_"+day+"_all.clu") as csvfile:
+        printer = csv.reader(csvfile, delimiter= " ")
+        next(printer)
+        next(printer)
+        for row in printer:
+            #se ancora la chiave non esiste, creala, sennò aggiungi alla lista relativa alla chiave selezionata
+            if row[0] not in comm_dict.keys():
+                comm_dict[row[0]] = [row[1]]
+            else:
+                print (row)
+                print("c'è un problema, nodo ripetuto..")
 
 def generaEgoNetwork(hour,day):
-    graph = generaNetworkxGraphCompleto("assets/data/sender_per_hour/sender_count_"+day+"_"+hour+".csv",hour,day)
+    graph = generaNetworkxGraphCompleto("assets/data/sender_per_hour/sender_count_"+day+"_"+str(hour)+".csv",hour,day)
     
     #leggo dal file json la lista di tutti i nodi per cui devo costruire una ego
     with open ("assets/data/ego_per_hour/"+day+"/listanodiscript.json") as nodijson:
         watchNodes = json.load(nodijson)
     watchNodes = watchNodes['watchnodes']
 
-    #leggo dal file clu la comunità a cui ogni nodo appartiene
-    comm_dict = {} # { 'comm_1': [node-id1, node-id2,..], 'comm_2': [...], ...}
-
-    with open ("assets/data/communities_partition/edgelist_"+day+"_all.clu") as csvfile:
-        printer = csv.reader(csvfile)
-        next(printer)
-        next(printer)
-        for row in printer:
-            #se ancora la chiave non esiste, creala, sennò aggiungi alla lista relativa alla chiave selezionata
-
-
-    for center in ['1433827']:
+    
+    for center in watchNodes:
         if center == '1278894':
             continue
        
@@ -102,7 +110,6 @@ def generaEgoNetwork(hour,day):
         #ego_net.add_weighted_edges_from( [(i[0],i[1],i[2]['weight']) for i in graph.edges([center],data=True)] )
         
         if center not in graph.nodes():
-            print ('centro non presente nel grafo'+ center)
             continue
         
         ego_net = nx.ego_graph(graph, n=center, undirected=True)
@@ -130,14 +137,19 @@ def generaEgoNetwork(hour,day):
         nx.reverse(aux_graph_reversed, copy=False)
         aux_graph.add_weighted_edges_from([(i[0],i[1],i[2]['weight']) for i in aux_graph_reversed.edges(data=True)])
         '''
-        #da li mi creo il dizionario
+
+        for node in ego_net.nodes():
+            if node not in comm_dict.keys():
+                print(node)
+                comm_dict[node] = 0
+
+        #da li mi creo l'oggetto da scrivere su json
         ego_json = {
             "nodes": list(map(lambda node: {
-                    "id":node,
-                    "group": "-" #per ora...
-                    "neighbors": list(filter(lambda x: ego_net[node][x]['weight'] > 1, ego_net[node]))
-                },       
-                ego_net.nodes())),
+                "id":node,
+                "group": comm_dict[node],
+                "neighbors": list(filter(lambda x: ego_net[node][x]['weight'] > 1, ego_net[node]))
+            }, ego_net.nodes())),
             "links": list(map(lambda edge: {
                 "source" : ego_net.nodes().index(edge[0]),
                 "target" : ego_net.nodes().index(edge[1]),
@@ -145,11 +157,13 @@ def generaEgoNetwork(hour,day):
             }, filter(lambda x: x[2]['weight'] > 1, ego_net.edges(data=True))))
         }
 
-        with open('assets/data/ego_per_hour/'+day+'/'+day+'_'+hour+'_'+center+'.json', 'w+') as outjson:
+        with open('assets/data/ego_per_hour/'+day+'/'+day+'_'+str(hour)+'_'+center+'.json', 'w+') as outjson:
             json.dump(ego_json, outjson)
 
 
-
-
-for day in ['Sat','Sun']:
-    generaReteCompleta('all',day)
+graph_node 
+comm_dict = {}
+for day in ['Fri']: #,'Sat','Sun']:
+    riempiDizionarioComm(day)
+    for hour in range(8,9):
+        generaEgoNetwork(hour,day)
