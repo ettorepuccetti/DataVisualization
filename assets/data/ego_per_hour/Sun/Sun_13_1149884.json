@@ -1,1 +1,1 @@
-{"nodes": [{"id": "1149884"}, {"id": "839736"}, {"id": "external"}], "links": [{"source": 0, "target": 1, "value": 286}, {"source": 0, "target": 2, "value": 2}, {"source": 1, "target": 0, "value": 296}]}
+{"nodes": [{"id": "1149884", "neighbors": ["839736", "external"]}, {"id": "839736", "neighbors": ["1149884"]}, {"id": "external", "neighbors": []}], "links": [{"source": 0, "target": 1, "value": 286}, {"source": 0, "target": 2, "value": 2}, {"source": 1, "target": 0, "value": 296}]}
