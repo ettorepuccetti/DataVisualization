@@ -71,13 +71,13 @@ function app(){
     me.updateChartData = function() {
         d3.csv("assets/data/counter_per_hour/sender_count_" +day+ "_" + hour +".csv",function(error, data){
             if (error) throw error
-            
+            senderGraph.updateScale(hour);
             senderGraph.updateGraph(data);
         });
 
          d3.csv("assets/data/counter_receiver_per_hour/receiver_count_"+day+"_" + hour +".csv",function(error, data){
             if (error) throw error
-            
+            receiverGraph.updateScale(hour);
             receiverGraph.updateGraph(data);
         });
 

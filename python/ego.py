@@ -31,7 +31,7 @@ def generaNodi(day):
         json.dump({"watchnodes":list(map(lambda x: x.replace("'","\""),watchNodes))}, outjson)
 
 
-def generaNetworkxGraphCompleto(filename,hour,day):
+def generaNetworkxGraphCompleto(filename):
     values = []
 
     #apro il file grezzo, con tutti i timestamp per costruirmi la rete
@@ -58,42 +58,54 @@ def generaNetworkxGraphCompleto(filename,hour,day):
 
 def generaReteCompleta(hour,day):   
     if hour == 'all':
-        graph = generaNetworkxGraphCompleto("assets/data/comm-data-"+day+".csv",hour,day)
+        graph = generaNetworkxGraphCompleto("assets/data/comm-data-"+day+".csv")
     else:
-        graph = generaNetworkxGraphCompleto("assets/data/sender_per_hour/sender_count_"+day+"_"+hour+".csv",hour,day)
+        graph = generaNetworkxGraphCompleto("assets/data/sender_per_hour/sender_count_"+day+"_"+hour+".csv")
 
     #genero il file della rete completa di questa ora per passarla a infomap
     with open ("assets/data/complete_network/edgelist_"+day+"_"+hour+".csv","w+", newline="") as csvout:
         mywriter = csv.writer(csvout, delimiter = " ")
-        graph_node = graph .nodes()
+        graph_node = graph.nodes()
         mywriter.writerow(["*Vertices",str(len(graph_node))])
         for i,n in enumerate(graph.nodes()):
             mywriter.writerow([i,n])
         mywriter.writerow(["*Edges",str(len(graph.edges(data=True)))])
         for e in graph.edges(data=True):
             mywriter.writerow([graph_node.index(e[0]), graph_node.index(e[1]), e[2]['weight']])
+
+    
     
 
 def riempiDizionarioComm(day):
     #devo riaprire il file della rete completa assets/data/complete_network/edgelist_"+day+"_all.csv"
     # e scrivere nel dizionario a che nodo corrisponde il numero di nodo che ho nel file aperto nella cartella communities
-
+    graph = generaNetworkxGraphCompleto("assets/data/comm-data-"+day+".csv")
     comm_dict = {}
+
+    #ora che posso accedere a graph, devo sputare fuori il dizionario non con gli indici di nodi, ma con l'id
+
     #leggo dal file clu la comunità a cui ogni nodo appartiene
-    with open ("assets/data/communities/edgelist_"+day+"_all.clu") as csvfile:
+    with open ("../infomap/infomap/output/edgelist_"+day+"_all.clu") as csvfile:
         printer = csv.reader(csvfile, delimiter= " ")
         next(printer)
         next(printer)
         for row in printer:
             #se ancora la chiave non esiste, creala, sennò aggiungi alla lista relativa alla chiave selezionata
-            if row[0] not in comm_dict.keys():
-                comm_dict[row[0]] = [row[1]]
+            if graph.nodes()[int(row[0])] not in comm_dict.keys():
+                comm_dict[graph.nodes()[int(row[0])]] = row[1]
             else:
                 print (row)
                 print("c'è un problema, nodo ripetuto..")
 
+    return comm_dict
+
+
 def generaEgoNetwork(hour,day):
-    graph = generaNetworkxGraphCompleto("assets/data/sender_per_hour/sender_count_"+day+"_"+str(hour)+".csv",hour,day)
+
+    graph_hour = generaNetworkxGraphCompleto("assets/data/sender_per_hour/sender_count_"+day+"_"+str(hour)+".csv")
+    filtered_edge_list = list(filter(lambda e: e[2]['weight'] > 1, graph_hour.edges(data=True)))
+    graph_hour = nx.DiGraph()
+    graph_hour.add_weighted_edges_from([(i[0],i[1],i[2]['weight']) for i in filtered_edge_list])
     
     #leggo dal file json la lista di tutti i nodi per cui devo costruire una ego
     with open ("assets/data/ego_per_hour/"+day+"/listanodiscript.json") as nodijson:
@@ -109,10 +121,10 @@ def generaEgoNetwork(hour,day):
         #ego_net = nx.DiGraph()
         #ego_net.add_weighted_edges_from( [(i[0],i[1],i[2]['weight']) for i in graph.edges([center],data=True)] )
         
-        if center not in graph.nodes():
+        if center not in graph_hour.nodes():
             continue
         
-        ego_net = nx.ego_graph(graph, n=center, undirected=True)
+        ego_net = nx.ego_graph(graph_hour, n=center, undirected=True)
         
         '''
         #estraggo in una lista i 10 archi che pesano di più
@@ -143,6 +155,8 @@ def generaEgoNetwork(hour,day):
                 print(node)
                 comm_dict[node] = 0
 
+
+
         #da li mi creo l'oggetto da scrivere su json
         ego_json = {
             "nodes": list(map(lambda node: {
@@ -161,9 +175,7 @@ def generaEgoNetwork(hour,day):
             json.dump(ego_json, outjson)
 
 
-graph_node 
-comm_dict = {}
 for day in ['Fri']: #,'Sat','Sun']:
-    riempiDizionarioComm(day)
+    comm_dict = riempiDizionarioComm(day)
     for hour in range(8,9):
         generaEgoNetwork(hour,day)

@@ -34,6 +34,16 @@ function OrizontalGraph(mylabel,myMode){
 
         return me
     }
+
+    me.updateScale = function(hour) {
+
+        if (hour === 'all'){
+            chart.yDomain([0,75000])
+        } else {
+            chart.yDomain([0,15000])
+        }
+
+    }
     
     me.updateGraph = function(data) {
 

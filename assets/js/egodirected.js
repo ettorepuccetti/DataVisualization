@@ -18,6 +18,11 @@ function EgoNetwork() {
     var center
     var toogledNode
 
+    var linkStrokeScale = d3.scale.linear()
+    .range([0,7]);
+
+    var color = d3.scale.category20c();
+
     function me(selection){
 
         if(force) {
@@ -45,6 +50,7 @@ function EgoNetwork() {
 
         force.start();
 
+        linkStrokeScale.domain([0,d3.max(links, function(d) {return d.value})]);
 
         if (!svg) {
             svg = selection.append("svg")
@@ -75,7 +81,7 @@ function EgoNetwork() {
             .classed("link", true)
             .attr("marker-end", "url(#end)")
             .attr("stroke", "lightgray")
-            .attr("stroke-width", function (d) {return (d.value)})
+            .attr("stroke-width", function (d) {return linkStrokeScale(d.value)})
             .attr("fill", "none")
         
         // define the nodes
@@ -90,12 +96,8 @@ function EgoNetwork() {
         // add the nodes
         circle = node.append("circle")
             //.classed("node",true)
-            .style("fill", function (d) { 
-                if (d.id === center ) return 'orange'; 
-                else if (observedNodes.indexOf(d.id) === -1) return 'steelblue';
-                    else return '#008000';
-                })
-            .attr("r", function (d) { if (d.id === center) return 9; else return 6; })
+            .style("fill", function (d) { return color(d.group)})
+            .attr("r", function (d) { if (d.id === center) return 13; else return 6; })
             .on("dblclick", function(d){
                 console.log(d);
                 toggleNode(d);
