@@ -1,5 +1,11 @@
 # file dataset interi
-assets/data/*
+assets/data/communities/
+assets/data/complete_network
+assets/data/receiver_per_hour
+assets/data/sender_per_hour
+assets/data/comm*
+demon/
+documents/
 node_modules/
 .vscode/
 
@@ -107,4 +113,4 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-assets/data/
+

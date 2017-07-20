@@ -19,9 +19,13 @@ function EgoNetwork() {
     var toogledNode
 
     var linkStrokeScale = d3.scale.linear()
-    .range([0,7]);
+        .range([0,10]);
 
-    var color = d3.scale.category20c();
+    var nodeRadiusScale = d3.scale.sqrt()
+        .range([5,15]);
+
+    var color = d3.scale.ordinal()
+        .range(colorbrewer['Paired'][12]);
 
     function me(selection){
 
@@ -32,10 +36,17 @@ function EgoNetwork() {
         nodes = d3.values(selection.datum().nodes)
         links = selection.datum().links
 
+        linkStrokeScale.domain([0,d3.max(links, function(d) {return d.value})]);
+        var groupList = [...new Set(nodes.map(function(d) {return d.group}))]
+        color.domain(groupList);
+        nodeRadiusScale.domain([0,d3.max(nodes, function(d)  {return d.neighbors.length})])
+
         if(links.length > 0) {
-            document.getElementById("max").innerHTML = "max count:  "+ d3.max(links, function(d) { return +d.value; }).toString()
+            document.getElementById("max").innerHTML = "max weighted edge:  "+ d3.max(links, function(d) { return +d.value; }).toString()
+            document.getElementById("comm").innerHTML = "n of communities:  "+ groupList.length.toString()
         } else {
             document.getElementById("max").innerHTML = "max count: 0 "
+            document.getElementById("comm").innerHTML = "n of communities: 0"
         }
 
     
@@ -49,8 +60,6 @@ function EgoNetwork() {
             .on("tick", tick);
 
         force.start();
-
-        linkStrokeScale.domain([0,d3.max(links, function(d) {return d.value})]);
 
         if (!svg) {
             svg = selection.append("svg")
@@ -74,12 +83,26 @@ function EgoNetwork() {
         .append("svg:path")
             .attr("d", "M0,-5L10,0L0,5");
 
+        svg.append("svg:defs").selectAll("marker")
+            .data(["end_g"])      // Different link/path types can be defined here
+        .enter().append("svg:marker")    // This section adds in the arrows
+            .attr("id", String)
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 25)
+            .attr("refY", -1.5)
+            .attr("markerWidth", 10)
+            .attr("markerHeight", 10)
+            .attr("orient", "auto")
+            .attr("markerUnits", "userSpaceOnUse")
+        .append("svg:path")
+            .attr("d", "M0,-5L10,0L0,5");
+
         // add the links and the arrows
         path = svg.append("svg:g").selectAll("path")
             .data(links, function(d) {return d.source.id + "-" + d.target.id;})
         path.enter().append("svg:path")
             .classed("link", true)
-            .attr("marker-end", "url(#end)")
+            .attr("marker-end", function(d) {if (nodeRadiusScale(d.target.neighbors.length) > 10) return "url(#end_g)"; else return "url(#end)"})
             .attr("stroke", "lightgray")
             .attr("stroke-width", function (d) {return linkStrokeScale(d.value)})
             .attr("fill", "none")
@@ -97,20 +120,24 @@ function EgoNetwork() {
         circle = node.append("circle")
             //.classed("node",true)
             .style("fill", function (d) { return color(d.group)})
-            .attr("r", function (d) { if (d.id === center) return 13; else return 6; })
+            .style("stroke", function(d) { if (d.id === center) return "black"})
+            .attr("r", function (d) {return nodeRadiusScale(d.neighbors.length); })
             .on("dblclick", function(d){
-                console.log(d);
                 toggleNode(d);
                 //force.alpha(0.01).start();
                 tick();
-            }); 
+            })
+            .on("click",function(d) {
+                clicked(d);
+                tick();
+            });
 
         // add the text 
         node.append("text")
             .attr("x", 12)
             .attr("dy", ".35em")
             .attr("fill", function(d) {if (observedNodes.indexOf(d.id) === -1) return 'red'; else return '#008000'})
-            .text(function(d) { return d.id; });
+            .text(function(d) { return d.id + " (" + d.group.toString() + ")"; });
 
         function toggleNode(n) {
             toogledNode = n.id
@@ -119,6 +146,10 @@ function EgoNetwork() {
                 if(n.neighbors.indexOf(node.id)!==-1)
                     node.highlight = n.highlight;
             })
+        }
+
+        function clicked(d) {
+            d.clicked = !d.clicked
         }
 
         // add the curvy lines
@@ -138,7 +169,8 @@ function EgoNetwork() {
             
             node.attr("transform", function(d) { 
                     return "translate(" + d.x + "," + d.y + ")"; })
-                .classed("highlight", function(d){return d.highlight});
+                .classed("highlight", function(d){return d.highlight})
+                .classed("clicked", function(d) {return d.clicked || d.id === 'external'})
         }
 
         return me

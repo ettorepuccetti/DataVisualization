@@ -113,7 +113,7 @@ def generaEgoNetwork(hour,day):
     watchNodes = watchNodes['watchnodes']
 
     
-    for center in watchNodes:
+    for center in ['146240']:
         if center == '1278894':
             continue
        
@@ -156,7 +156,6 @@ def generaEgoNetwork(hour,day):
                 comm_dict[node] = 0
 
 
-
         #da li mi creo l'oggetto da scrivere su json
         ego_json = {
             "nodes": list(map(lambda node: {
@@ -175,7 +174,7 @@ def generaEgoNetwork(hour,day):
             json.dump(ego_json, outjson)
 
 
-for day in ['Fri']: #,'Sat','Sun']:
+for day in ['Fri']:
     comm_dict = riempiDizionarioComm(day)
-    for hour in range(8,9):
+    for hour in range(8,24):
         generaEgoNetwork(hour,day)

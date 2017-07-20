@@ -1,0 +1,1 @@
+{"nodes": [{"id": "1231028", "group": "3", "neighbors": ["1082547"]}, {"id": "1045021", "group": "3", "neighbors": ["1231028"]}, {"id": "1082547", "group": "3", "neighbors": ["1045021", "1231028"]}], "links": [{"source": 0, "target": 2, "value": 2}, {"source": 1, "target": 0, "value": 2}, {"source": 2, "target": 1, "value": 2}, {"source": 2, "target": 0, "value": 4}]}

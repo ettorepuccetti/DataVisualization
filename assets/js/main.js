@@ -92,14 +92,14 @@ function app(){
                 if (error) {
                     console.log("ID not in database");
                     d3.select("#ego")
-                        .datum({"nodes": [{"id": center}], "links": []})
+                        .datum({"nodes": [{"id": center, "group": 0, "neighbors": []}], "links": []})
                         .call(egoGraph);
                     throw error
                 }
                 if (data.nodes.length === 0) {
                     console.log("ego network vuota");
                     d3.select("#ego")
-                        .datum({"nodes": [{"id": center}], "links": []})
+                        .datum({"nodes": [{"id": center, "group": 0, "neighbors": []}], "links": []})
                         .call(egoGraph);
                 } else {
                     egoGraph.egoCenter(center)
