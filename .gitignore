@@ -5,7 +5,8 @@ assets/data/receiver_per_hour
 assets/data/sender_per_hour
 assets/data/comm*
 demon/
-documents/
+documents/dino*
+documents/MC2*
 node_modules/
 .vscode/
 
