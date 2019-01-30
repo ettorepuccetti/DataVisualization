@@ -47,7 +47,7 @@ Mini-Challenge 2 asks you to dive into the communications over time that took pl
 |:--:|
 | Ego network of one of the two IDs that outstanding for traffic |
 
-Eventually, we discover that ID 1278894 and ID 839736 are IDs that represent park's customer services. A lot of person concact them but just for few messages at time.
+Eventually, we discover that ID 1278894 and ID 839736 are IDs that represent park's customer services. A lot of persons concact them but just for few messages at time.
 
 ### Q2
 
@@ -68,3 +68,10 @@ Different communites are represented using different color node. However, since 
 ![vandalism](documents/Auxiliary&#32;Files/vandalism.png)
 
 On Sunday at 11 am, we notice more messages sent to external than usual.
+
+<br>
+<br>
+
+## Final notes
+
+For the full explanation, we invite you to read the project report [document](https://github.com/ettorepuccetti/DataVisualization/blob/master/documents/Auxiliary%20Files/report%20visual%20puccetti%20copy.pdf) (italian version only, sorry)
