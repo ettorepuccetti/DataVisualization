@@ -36,9 +36,16 @@ Mini-Challenge 2 asks you to dive into the communications over time that took pl
    * *Characterize the communication patterns you see.*
    * *Based on these patterns, what do you hypothesize about these IDs?*
   
-| ![barchart](documents/Auxiliary&#32;Files/barchart.png) | ![egonetwork customer service](documents/Auxiliary&#32;Files/egonetworkCustomerService.png) |
-|:--:|:--:|
-| Barchart of the top-senders and top-receivers ID| Ego network of one of the two IDs that outstanding for traffic |
+| ![barchart](documents/Auxiliary&#32;Files/barchart.png) |
+|:--:|
+| Barchart of the top-senders and top-receivers ID|
+
+<br>
+<br>
+
+| ![egonetwork customer service](documents/Auxiliary&#32;Files/egonetworkCustomerService.png) |
+|:--:|
+| Ego network of one of the two IDs that outstanding for traffic |
 
 Eventually, we discover that ID 1278894 and ID 839736 are IDs that represent park's customer services. A lot of person concact them but just for few messages at time.
 
